@@ -3,7 +3,7 @@ Configuration Module for OncoRisk EC Backend
 """
 
 from pydantic_settings import BaseSettings
-from typing import List
+from typing import List, Optional
 import os
 
 
@@ -20,7 +20,7 @@ class Settings(BaseSettings):
     BACKEND_PORT: int = 8000
 
     # CORS
-    CORS_ORIGINS: List[str] = ["http://localhost:3000", "http://127.0.0.1:3000"]
+    CORS_ORIGINS: List[str] = ["http://localhost:3000", "http://127.0.0.1:3000", "https://frontend-seven-henna-16.vercel.app"]
 
     # Paths
     BASE_DIR: str = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -36,6 +36,12 @@ class Settings(BaseSettings):
 
     # Logging
     LOG_LEVEL: str = "INFO"
+
+    # AI Agent Configuration
+    ANTHROPIC_API_KEY: Optional[str] = None
+    OPENAI_API_KEY: Optional[str] = None
+    AI_MODEL: str = "claude-sonnet-4-20250514"  # Default to Claude Sonnet
+    AI_MAX_TOKENS: int = 4096
 
     class Config:
         env_file = ".env"

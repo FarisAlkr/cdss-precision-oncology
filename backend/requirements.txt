@@ -17,10 +17,14 @@ optuna==4.1.0
 # Data Processing
 scipy==1.15.1
 
+# Document Processing
+pypdf==5.1.0
+
 # API & Utilities
 python-jose[cryptography]==3.3.0
 python-dotenv==1.0.1
 httpx==0.28.1
+anthropic==0.42.0
 
 # Report Generation
 reportlab==4.4.6

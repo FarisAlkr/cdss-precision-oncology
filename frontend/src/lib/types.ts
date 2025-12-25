@@ -31,7 +31,7 @@ export interface PatientData {
   myometrial_invasion: MyometrialInvasion;
   lvsi: LVSIStatus;
   lymph_nodes: LymphNodeStatus;
-  // Molecular
+  // Molecular - Core TCGA markers
   pole_status: "Mutated" | "Wild-type" | "Not Tested";
   mmr_status: "Proficient" | "Deficient" | "Not Tested";
   mmr_protein_lost?: "MLH1" | "MSH2" | "MSH6" | "PMS2";
@@ -41,6 +41,26 @@ export interface PatientData {
   ctnnb1_status: "Mutated" | "Wild-type" | "Not Tested";
   er_percent?: number;
   pr_percent?: number;
+  // Auto-determined molecular classification (from NGS reports)
+  molecular_group?: MolecularGroup;
+  // MSI status from NGS (Soroka reports)
+  msi_status?: "Stable" | "Unstable";
+  // TMB from NGS (Soroka reports)
+  tmb_score?: number;
+  tmb_status?: "Low" | "High";
+  // Individual MMR protein IHC status (Soroka MMR reports)
+  mlh1_status?: "Intact" | "Lost";
+  pms2_status?: "Intact" | "Lost";
+  msh2_status?: "Intact" | "Lost";
+  msh6_status?: "Intact" | "Lost";
+  // Additional molecular markers from NGS (Soroka Oncomine)
+  fgfr2_status?: "Mutated" | "Wild-type";
+  pten_status?: "Mutated" | "Wild-type";
+  pik3ca_status?: "Mutated" | "Wild-type";
+  fbxw7_status?: "Mutated" | "Wild-type";
+  kras_status?: "Mutated" | "Wild-type";
+  // Tumor characteristics from NGS
+  tumor_purity?: number;
 }
 
 // Molecular Classification Types

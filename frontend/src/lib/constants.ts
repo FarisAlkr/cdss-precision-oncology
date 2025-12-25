@@ -9,7 +9,17 @@ export const APP_VERSION = "1.0.0";
 export const APP_DESCRIPTION = "AI-Driven Molecular Risk Stratification for Endometrial Cancer";
 
 // FIGO Stages
-export const FIGO_STAGES: FIGOStage[] = ["IA", "IB", "II", "IIIA", "IIIB", "IIIC1", "IIIC2", "IVA", "IVB"];
+export const FIGO_STAGES = [
+  { value: "IA", label: "Stage IA", description: "Tumor confined to uterus, <50% myometrial invasion" },
+  { value: "IB", label: "Stage IB", description: "Tumor confined to uterus, ≥50% myometrial invasion" },
+  { value: "II", label: "Stage II", description: "Tumor invades cervical stroma" },
+  { value: "IIIA", label: "Stage IIIA", description: "Tumor invades serosa or adnexa" },
+  { value: "IIIB", label: "Stage IIIB", description: "Vaginal or parametrial involvement" },
+  { value: "IIIC1", label: "Stage IIIC1", description: "Pelvic lymph node metastasis" },
+  { value: "IIIC2", label: "Stage IIIC2", description: "Para-aortic lymph node metastasis" },
+  { value: "IVA", label: "Stage IVA", description: "Tumor invades bladder or bowel mucosa" },
+  { value: "IVB", label: "Stage IVB", description: "Distant metastasis" },
+] as const;
 
 export const FIGO_STAGE_DESCRIPTIONS: Record<FIGOStage, string> = {
   IA: "Tumor confined to uterus, <50% myometrial invasion",
@@ -47,6 +57,7 @@ export const LVSI_STATUSES: LVSIStatus[] = ["None", "Focal", "Substantial"];
 
 // Myometrial Invasion
 export const MYOMETRIAL_INVASIONS: MyometrialInvasion[] = ["<50%", "≥50%"];
+export const MYOMETRIAL_INVASION_STATUSES = MYOMETRIAL_INVASIONS; // Alias for compatibility
 
 // Lymph Node Status
 export const LYMPH_NODE_STATUSES: LymphNodeStatus[] = ["Negative", "Pelvic+", "Para-aortic+"];
@@ -66,11 +77,11 @@ export const P53_PATTERNS = ["Null", "Missense"] as const;
 
 // ECOG Status
 export const ECOG_STATUSES = [
-  { value: 0, label: "ECOG 0: Fully active" },
-  { value: 1, label: "ECOG 1: Restricted in strenuous activity" },
-  { value: 2, label: "ECOG 2: Ambulatory, unable to work" },
-  { value: 3, label: "ECOG 3: Limited self-care" },
-  { value: 4, label: "ECOG 4: Completely disabled" },
+  { value: 0, label: "ECOG 0", description: "Fully active" },
+  { value: 1, label: "ECOG 1", description: "Restricted in strenuous activity" },
+  { value: 2, label: "ECOG 2", description: "Ambulatory, unable to work" },
+  { value: 3, label: "ECOG 3", description: "Limited self-care" },
+  { value: 4, label: "ECOG 4", description: "Completely disabled" },
 ];
 
 // Age Range
@@ -93,33 +104,53 @@ export const MOLECULAR_GROUP_INFO = {
   POLEmut: {
     name: "POLE Ultramutated",
     shortName: "POLEmut",
+    displayName: "POLEmut",
     frequency: "~7%",
-    prognosis: "Excellent (5-year RFS >95%)",
+    prognosis: "Excellent prognosis with >95% 5-year recurrence-free survival",
+    shortDescription: "Ultramutated phenotype with robust immune response",
+    keyFeatures: "High tumor mutational burden, strong anti-tumor immunity, excellent response to standard therapy",
+    recurrenceRate: "<5%",
     color: "#10b981",
+    colorClass: "text-emerald-600 bg-emerald-100",
     icon: "shield-check",
   },
   MMRd: {
     name: "MMR Deficient",
     shortName: "MMRd",
+    displayName: "MMRd",
     frequency: "~28%",
-    prognosis: "Intermediate (5-year RFS ~85-90%)",
+    prognosis: "Intermediate prognosis with 85-90% 5-year recurrence-free survival",
+    shortDescription: "Mismatch repair deficiency, immunotherapy candidate",
+    keyFeatures: "Lynch syndrome association, high neoantigen load, responsive to immune checkpoint inhibitors",
+    recurrenceRate: "10-15%",
     color: "#3b82f6",
+    colorClass: "text-blue-600 bg-blue-100",
     icon: "dna",
   },
   NSMP: {
     name: "No Specific Molecular Profile",
     shortName: "NSMP",
+    displayName: "NSMP",
     frequency: "~40%",
-    prognosis: "Variable (depends on L1CAM/CTNNB1)",
+    prognosis: "Variable prognosis depending on L1CAM and CTNNB1 status",
+    shortDescription: "Risk stratified by traditional and emerging biomarkers",
+    keyFeatures: "Heterogeneous group, L1CAM positivity indicates higher risk, CTNNB1 mutation associated with late recurrence",
+    recurrenceRate: "10-25%",
     color: "#64748b",
+    colorClass: "text-slate-600 bg-slate-100",
     icon: "minus-circle",
   },
   p53abn: {
     name: "p53 Abnormal",
     shortName: "p53abn",
+    displayName: "p53abn",
     frequency: "~25%",
-    prognosis: "Poor (5-year RFS ~50-60%)",
+    prognosis: "Poor prognosis with 50-60% 5-year recurrence-free survival",
+    shortDescription: "Aggressive tumor biology with copy-number high phenotype",
+    keyFeatures: "Serous-like molecular features, high genomic instability, requires intensive therapy",
+    recurrenceRate: "40-50%",
     color: "#ef4444",
+    colorClass: "text-rose-600 bg-rose-100",
     icon: "alert-triangle",
   },
 };

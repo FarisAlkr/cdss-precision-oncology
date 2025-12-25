@@ -10,7 +10,7 @@ from fastapi.responses import JSONResponse
 import logging
 
 from app.config import settings
-from app.api.routes import prediction, explanation, reports, scenarios
+from app.api.routes import prediction, explanation, reports, scenarios, document
 
 # Configure logging
 logging.basicConfig(
@@ -89,6 +89,7 @@ app.include_router(prediction.router, prefix="/api/v1", tags=["Prediction"])
 app.include_router(explanation.router, prefix="/api/v1", tags=["Explanation"])
 app.include_router(reports.router, prefix="/api/v1", tags=["Reports"])
 app.include_router(scenarios.router, prefix="/api/v1", tags=["Demo Scenarios"])
+app.include_router(document.router, prefix="/api/v1", tags=["Document Analysis"])
 
 
 @app.exception_handler(Exception)

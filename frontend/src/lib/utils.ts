@@ -30,52 +30,52 @@ export function formatNumber(value: number): string {
 /**
  * Get color for risk category
  */
-export function getRiskColor(category: RiskCategory): string {
-  const colors: Record<RiskCategory, string> = {
-    LOW: "#22c55e", // Green
-    INTERMEDIATE: "#f59e0b", // Amber
-    HIGH: "#ef4444", // Red
+export function getRiskColor(category: RiskCategory | string): string {
+  const colors: Record<string, string> = {
+    LOW: "bg-emerald-500 text-white",
+    INTERMEDIATE: "bg-amber-500 text-white",
+    HIGH: "bg-rose-500 text-white",
   };
-  return colors[category];
+  return colors[category] || colors.INTERMEDIATE;
 }
 
 /**
  * Get color for molecular group
  */
-export function getMolecularColor(group: MolecularGroup): string {
-  const colors: Record<MolecularGroup, string> = {
-    POLEmut: "#10b981", // Emerald
-    MMRd: "#3b82f6", // Blue
-    NSMP: "#64748b", // Slate
-    p53abn: "#ef4444", // Red
+export function getMolecularColor(group: MolecularGroup | string): string {
+  const colors: Record<string, string> = {
+    POLEmut: "bg-emerald-500 text-white",
+    MMRd: "bg-blue-500 text-white",
+    NSMP: "bg-slate-500 text-white",
+    p53abn: "bg-rose-500 text-white",
   };
-  return colors[group];
+  return colors[group] || colors.NSMP;
 }
 
 /**
  * Get display name for molecular group
  */
-export function getMolecularDisplayName(group: MolecularGroup): string {
-  const names: Record<MolecularGroup, string> = {
+export function getMolecularDisplayName(group: MolecularGroup | string): string {
+  const names: Record<string, string> = {
     POLEmut: "POLE Ultramutated",
     MMRd: "MMR Deficient",
     NSMP: "No Specific Molecular Profile",
     p53abn: "p53 Abnormal",
   };
-  return names[group];
+  return names[group] || group;
 }
 
 /**
  * Get icon name for molecular group
  */
-export function getMolecularIcon(group: MolecularGroup): string {
-  const icons: Record<MolecularGroup, string> = {
+export function getMolecularIcon(group: MolecularGroup | string): string {
+  const icons: Record<string, string> = {
     POLEmut: "shield-check",
     MMRd: "dna",
     NSMP: "minus-circle",
     p53abn: "alert-triangle",
   };
-  return icons[group];
+  return icons[group] || "minus-circle";
 }
 
 /**
@@ -149,8 +149,8 @@ export function isPatientDataComplete(data: any): boolean {
 /**
  * Get risk badge text
  */
-export function getRiskBadgeText(category: RiskCategory): string {
-  return category.replace("_", " ");
+export function getRiskBadgeText(category: RiskCategory | string): string {
+  return String(category).replace("_", " ");
 }
 
 /**

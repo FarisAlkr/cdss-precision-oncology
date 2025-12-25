@@ -100,6 +100,91 @@ export const api = {
   healthCheck: async (): Promise<{ status: string; version: string; environment: string }> => {
     return fetchAPI("/health");
   },
+
+  /**
+   * Analyze uploaded document and extract patient data (pattern-based)
+   */
+  analyzeDocument: async (file: File): Promise<{
+    extracted_data: Partial<PatientData>;
+    confidence: number;
+    method: string;
+    warnings: string[];
+  }> => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const url = `${API_BASE_URL}/document/analyze`;
+    const response = await fetch(url, {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({ detail: response.statusText }));
+      throw new ApiError(response.status, error.detail || "Failed to analyze document");
+    }
+
+    return response.json();
+  },
+
+  /**
+   * AI-Powered Intelligent Document Analysis
+   * Uses LLM to read any medical document and provide comprehensive assessment
+   */
+  aiAnalyzeDocument: async (file: File): Promise<MedicalAssessment> => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const url = `${API_BASE_URL}/document/ai-analyze`;
+    const response = await fetch(url, {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({ detail: response.statusText }));
+      throw new ApiError(response.status, error.detail || "AI analysis failed");
+    }
+
+    return response.json();
+  },
 };
+
+// Medical Assessment type for AI analysis response
+export interface MedicalAssessment {
+  patient_data: Partial<PatientData> & {
+    gender?: string;
+    tumor_size?: number;
+    msi_status?: string;
+    tmb_score?: number;
+    tmb_status?: string;
+    mlh1_status?: string;
+    pms2_status?: string;
+    msh2_status?: string;
+    msh6_status?: string;
+    fgfr2_status?: string;
+    pten_status?: string;
+    pik3ca_status?: string;
+    kras_status?: string;
+    arid1a_status?: string;
+  };
+  molecular_group: "POLEmut" | "MMRd" | "NSMP" | "p53abn" | "Unknown";
+  molecular_group_confidence: number;
+  molecular_rationale: string;
+  risk_category: "LOW" | "INTERMEDIATE" | "HIGH";
+  risk_score: number;
+  five_year_recurrence_risk: number;
+  clinical_summary: string;
+  key_findings: string[];
+  risk_factors: string[];
+  protective_factors: string[];
+  treatment_implications: string;
+  recommended_surveillance: string;
+  clinical_trial_eligibility: string[];
+  detailed_explanation: string;
+  extraction_confidence: number;
+  missing_critical_data: string[];
+  warnings: string[];
+}
 
 export { ApiError };
