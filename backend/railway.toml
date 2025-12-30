@@ -7,4 +7,4 @@ healthcheckPath = "/api/v1/health"
 healthcheckTimeout = 100
 restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 3
-# Auto-deploy trigger
+# Auto-deploy trigger: 2025-12-30-v2-figo2023
