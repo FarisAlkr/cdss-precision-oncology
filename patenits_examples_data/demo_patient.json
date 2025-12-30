@@ -1,0 +1,20 @@
+{
+  "patient_id": "DEMO-001",
+  "age": 64,
+  "bmi": 32.5,
+  "ecog_status": 1,
+  "diabetes": false,
+  "stage": "IA",
+  "histology": "Endometrioid",
+  "grade": "G3",
+  "myometrial_invasion": "<50%",
+  "lvsi": "Focal",
+  "lymph_nodes": "Negative",
+  "pole_status": "Wild-type",
+  "mmr_status": "Proficient",
+  "p53_status": "Abnormal",
+  "l1cam_status": "Positive",
+  "ctnnb1_status": "Wild-type",
+  "er_percent": 20,
+  "pr_percent": 10
+}

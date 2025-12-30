@@ -296,18 +296,20 @@ def extract_from_text(text: str) -> Dict[str, Any]:
     # ========================================
     # POLE MUTATION STATUS - Soroka NGS Reports
     # ========================================
-    # Check POLE mutation status from gene list
-    pole_detected = re.search(r'pole\s*\(?detected\)?', text_lower)
-    pole_not_detected = re.search(r'pole\s*\(?not\s*detected\)?', text_lower)
+    # Check POLE mutation status - look for explicit patterns first
+    pole_wildtype = re.search(r'pole[:\s]+(?:status[:\s]+)?wild[-\s]?type', text_lower)
+    pole_mutated = re.search(r'pole[:\s]+(?:status[:\s]+)?mutated', text_lower)
+    pole_detected = re.search(r'pole\s+detected(?!\s+not)', text_lower)
+    pole_not_detected = re.search(r'pole\s+not\s+detected', text_lower)
 
-    if pole_detected and not pole_not_detected:
-        result["pole_status"] = "Mutated"
-    elif pole_not_detected:
+    if pole_wildtype or pole_not_detected:
         result["pole_status"] = "Wild-type"
+    elif pole_mutated or pole_detected:
+        result["pole_status"] = "Mutated"
     elif "pole" in text_lower:
-        if any(word in text_lower for word in ["mutated", "mutation", "positive"]):
+        if any(word in text_lower for word in ["mutated", "mutation"]):
             result["pole_status"] = "Mutated"
-        elif any(word in text_lower for word in ["wild", "negative", "no mutation"]):
+        elif "wild" in text_lower:
             result["pole_status"] = "Wild-type"
 
     # ========================================
@@ -515,8 +517,25 @@ def extract_from_text(text: str) -> Dict[str, Any]:
     # ========================================
     # LVSI extraction
     # ========================================
-    if "lvsi" in text_lower or "lymphovascular" in text_lower:
-        if any(word in text_lower for word in ["present", "positive", "identified", "seen"]):
+    lvsi_focal = re.search(r'lvsi[:\s]+(?:status[:\s]+)?focal', text_lower)
+    lvsi_substantial = re.search(r'lvsi[:\s]+(?:status[:\s]+)?substantial', text_lower)
+    lvsi_present = re.search(r'lvsi[:\s]+(?:status[:\s]+)?present', text_lower)
+    lvsi_absent = re.search(r'lvsi[:\s]+(?:status[:\s]+)?(?:absent|negative)', text_lower)
+
+    if lvsi_focal:
+        result["lvsi"] = "Focal"
+    elif lvsi_substantial:
+        result["lvsi"] = "Substantial"
+    elif lvsi_present:
+        result["lvsi"] = "Present"
+    elif lvsi_absent:
+        result["lvsi"] = "Absent"
+    elif "lvsi" in text_lower or "lymphovascular" in text_lower:
+        if "focal" in text_lower:
+            result["lvsi"] = "Focal"
+        elif "substantial" in text_lower:
+            result["lvsi"] = "Substantial"
+        elif any(word in text_lower for word in ["present", "positive", "identified", "seen"]):
             result["lvsi"] = "Present"
         elif any(word in text_lower for word in ["absent", "negative", "not identified", "not seen"]):
             result["lvsi"] = "Absent"
@@ -542,7 +561,14 @@ def extract_from_text(text: str) -> Dict[str, Any]:
     # ========================================
     # CTNNB1
     # ========================================
-    if "ctnnb1" in text_lower or "beta-catenin" in text_lower or "β-catenin" in text_lower:
+    ctnnb1_wildtype = re.search(r'ctnnb1[:\s]+(?:status[:\s]+)?wild[-\s]?type', text_lower)
+    ctnnb1_mutated = re.search(r'ctnnb1[:\s]+(?:status[:\s]+)?mutated', text_lower)
+
+    if ctnnb1_wildtype:
+        result["ctnnb1_status"] = "Wild-type"
+    elif ctnnb1_mutated:
+        result["ctnnb1_status"] = "Mutated"
+    elif "ctnnb1" in text_lower or "beta-catenin" in text_lower or "β-catenin" in text_lower:
         if any(word in text_lower for word in ["mutated", "mutation", "positive", "nuclear"]):
             result["ctnnb1_status"] = "Mutated"
         elif any(word in text_lower for word in ["wild", "negative"]):
@@ -551,7 +577,14 @@ def extract_from_text(text: str) -> Dict[str, Any]:
     # ========================================
     # Lymph nodes
     # ========================================
-    if "lymph node" in text_lower or "nodal" in text_lower:
+    lymph_negative = re.search(r'lymph\s*node[:\s]+(?:status[:\s]+)?negative', text_lower)
+    lymph_positive = re.search(r'lymph\s*node[:\s]+(?:status[:\s]+)?positive', text_lower)
+
+    if lymph_negative:
+        result["lymph_nodes"] = "Negative"
+    elif lymph_positive:
+        result["lymph_nodes"] = "Positive"
+    elif "lymph node" in text_lower or "nodal" in text_lower:
         if any(word in text_lower for word in ["positive", "metastasis", "involved"]):
             result["lymph_nodes"] = "Positive"
         elif any(word in text_lower for word in ["negative", "no metastasis", "not involved"]):

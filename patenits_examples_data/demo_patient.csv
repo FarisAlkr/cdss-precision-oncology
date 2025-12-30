@@ -1,0 +1,2 @@
+age,bmi,ecog_status,diabetes,stage,histology,grade,myometrial_invasion,lvsi,lymph_nodes,pole_status,mmr_status,p53_status,l1cam_status,ctnnb1_status,er_percent,pr_percent
+64,32.5,1,no,IA,Endometrioid,G3,<50%,Focal,Negative,Wild-type,Proficient,Abnormal,Positive,Wild-type,20,10
