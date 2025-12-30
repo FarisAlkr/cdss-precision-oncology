@@ -34,7 +34,14 @@ logs/
 dist/
 build/
 *.egg-info/
+.next/
 
 # Temporary files
 *.tmp
 *.temp
+
+# Screenshots
+*.png
+
+# Backend specific
+backend/.env
