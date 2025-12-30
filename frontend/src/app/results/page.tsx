@@ -424,6 +424,112 @@ export default function ResultsPage() {
             </div>
           </motion.div>
 
+          {/* FIGO 2023 Staging Card */}
+          {prediction.figo_2023_staging && (
+            <motion.div variants={itemVariants}>
+              <div className="card-premium rounded-3xl overflow-hidden">
+                <div className="bg-gradient-to-r from-violet-600 to-purple-700 p-6 sm:p-8">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <div className="flex items-center gap-4">
+                      <div className="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                        <Target className="w-8 h-8 text-white" />
+                      </div>
+                      <div>
+                        <h2 className="text-2xl sm:text-3xl font-bold text-white">FIGO 2023 Staging</h2>
+                        <p className="text-white/80 mt-1">Molecular-Integrated Classification</p>
+                      </div>
+                    </div>
+                    <div className="flex gap-3">
+                      <div className="px-4 py-2 rounded-xl bg-white/20 backdrop-blur-sm border border-white/30">
+                        <p className="text-white/70 text-xs uppercase tracking-wider">Anatomical</p>
+                        <p className="text-white text-xl font-bold">{prediction.figo_2023_staging.anatomical_stage}</p>
+                      </div>
+                      <div className="px-1 py-2 flex items-center">
+                        <ArrowRight className="w-6 h-6 text-white/60" />
+                      </div>
+                      <div className="px-4 py-2 rounded-xl bg-white/30 backdrop-blur-sm border-2 border-white/50">
+                        <p className="text-white/90 text-xs uppercase tracking-wider">FIGO 2023</p>
+                        <p className="text-white text-xl font-bold">{prediction.figo_2023_staging.figo_2023_stage}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-6 sm:p-10">
+                  <div className="grid lg:grid-cols-2 gap-8">
+                    {/* Left Column - Staging Rationale */}
+                    <div className="space-y-6">
+                      <div>
+                        <h3 className="text-xl font-bold text-slate-800 mb-3 flex items-center gap-2">
+                          <Info className="w-5 h-5 text-violet-500" />
+                          Staging Rationale
+                        </h3>
+                        <p className="text-slate-600 leading-relaxed">
+                          {prediction.figo_2023_staging.rationale}
+                        </p>
+                      </div>
+
+                      {prediction.figo_2023_staging.molecular_modifier && (
+                        <div className={`p-4 rounded-2xl border-2 ${
+                          prediction.figo_2023_staging.molecular_modifier.includes('m') || prediction.figo_2023_staging.molecular_modifier === '1'
+                            ? 'bg-emerald-50 border-emerald-200'
+                            : 'bg-rose-50 border-rose-200'
+                        }`}>
+                          <div className="flex items-center gap-2 mb-2">
+                            {prediction.figo_2023_staging.molecular_modifier.includes('m') || prediction.figo_2023_staging.molecular_modifier === '1' ? (
+                              <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+                            ) : (
+                              <AlertCircle className="w-5 h-5 text-rose-600" />
+                            )}
+                            <span className={`font-bold ${
+                              prediction.figo_2023_staging.molecular_modifier.includes('m') || prediction.figo_2023_staging.molecular_modifier === '1'
+                                ? 'text-emerald-700'
+                                : 'text-rose-700'
+                            }`}>
+                              Molecular Modifier: {prediction.figo_2023_staging.molecular_modifier}
+                            </span>
+                          </div>
+                          <p className={`text-sm ${
+                            prediction.figo_2023_staging.molecular_modifier.includes('m') || prediction.figo_2023_staging.molecular_modifier === '1'
+                              ? 'text-emerald-600'
+                              : 'text-rose-600'
+                          }`}>
+                            {prediction.figo_2023_staging.molecular_modifier.includes('m') || prediction.figo_2023_staging.molecular_modifier === '1'
+                              ? 'Favorable molecular profile - may allow treatment de-escalation'
+                              : 'Aggressive molecular profile - requires intensified treatment'}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Right Column - Clinical Information */}
+                    <div className="space-y-6">
+                      <div className="p-5 rounded-2xl bg-gradient-to-br from-violet-50 to-purple-50 border border-violet-100">
+                        <h4 className="font-bold text-violet-800 mb-3 flex items-center gap-2">
+                          <Activity className="w-4 h-4 text-violet-500" />
+                          Prognosis Impact
+                        </h4>
+                        <p className="text-sm text-violet-700 leading-relaxed">
+                          {prediction.figo_2023_staging.prognosis_impact}
+                        </p>
+                      </div>
+
+                      <div className="p-5 rounded-2xl bg-gradient-to-br from-slate-50 to-gray-50 border border-slate-100">
+                        <h4 className="font-bold text-slate-800 mb-3 flex items-center gap-2">
+                          <FileText className="w-4 h-4 text-slate-500" />
+                          Clinical Implications
+                        </h4>
+                        <p className="text-sm text-slate-600 leading-relaxed">
+                          {prediction.figo_2023_staging.clinical_implications}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
           {/* Key Insights Grid */}
           <motion.div variants={itemVariants} className="grid md:grid-cols-3 gap-6">
             {[

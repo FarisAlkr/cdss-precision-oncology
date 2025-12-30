@@ -77,11 +77,24 @@ export interface MolecularClassification {
 // Risk Prediction Types
 export type RiskCategory = "LOW" | "INTERMEDIATE" | "HIGH";
 
+// FIGO 2023 Staging (Molecular-Integrated)
+export interface FIGO2023Staging {
+  anatomical_stage: string;
+  figo_2023_stage: string;
+  stage_group: string;
+  molecular_modifier: string | null;
+  rationale: string;
+  prognosis_impact: string;
+  clinical_implications: string;
+  staging_system: string;
+}
+
 export interface PredictionResult {
   recurrence_probability: number;
   risk_category: RiskCategory;
   risk_percentile: number | null;
   molecular_classification: MolecularClassification;
+  figo_2023_staging?: FIGO2023Staging;
   stage_based_risk: number;
   risk_difference: number;
   reclassified: boolean;

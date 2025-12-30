@@ -13,8 +13,9 @@ from datetime import datetime
 
 from app.config import settings
 from app.models.patient import PatientData
-from app.models.prediction import PredictionResult, RiskCategory
+from app.models.prediction import PredictionResult, RiskCategory, FIGO2023Staging
 from app.core.molecular_classifier import MolecularClassifier
+from app.core.figo_staging import determine_figo_2023_stage, get_figo_2023_summary
 from app.data.feature_definitions import (
     STAGE_ENCODING,
     HISTOLOGY_ENCODING,
@@ -167,12 +168,37 @@ class RiskEngine:
         # Step 8: Calculate percentile (mock - in production would use population data)
         risk_percentile = int(recurrence_probability * 100)
 
+        # Step 9: FIGO 2023 staging with molecular integration
+        figo_stage = determine_figo_2023_stage(
+            anatomical_stage=patient.stage.value,
+            histology=patient.histology.value,
+            grade=patient.grade.value,
+            lvsi=patient.lvsi.value,
+            molecular_group=molecular_classification.group.value,
+            pole_status=patient.pole_status or "Not Tested",
+            mmr_status=patient.mmr_status or "Not Tested",
+            p53_status=patient.p53_status or "Not Tested",
+            myometrial_invasion=patient.myometrial_invasion.value,
+            lymph_nodes=patient.lymph_nodes.value,
+        )
+
+        figo_2023_staging = FIGO2023Staging(
+            anatomical_stage=figo_stage.anatomical_stage,
+            figo_2023_stage=figo_stage.molecular_integrated_stage,
+            stage_group=figo_stage.stage_group,
+            molecular_modifier=figo_stage.molecular_modifier,
+            rationale=figo_stage.rationale,
+            prognosis_impact=figo_stage.prognosis_impact,
+            clinical_implications=figo_stage.clinical_implications,
+        )
+
         # Create result
         result = PredictionResult(
             recurrence_probability=recurrence_probability,
             risk_category=RiskCategory(risk_category),
             risk_percentile=risk_percentile,
             molecular_classification=molecular_classification,
+            figo_2023_staging=figo_2023_staging,
             stage_based_risk=stage_based_risk,
             risk_difference=risk_difference,
             reclassified=reclassified,

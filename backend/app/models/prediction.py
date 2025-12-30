@@ -5,7 +5,7 @@ Models for risk prediction API responses.
 """
 
 from pydantic import BaseModel, Field
-from typing import Literal, Optional
+from typing import Literal, Optional, Dict, Any
 from enum import Enum
 
 
@@ -47,6 +47,33 @@ class MolecularClassification(BaseModel):
         }
 
 
+class FIGO2023Staging(BaseModel):
+    """FIGO 2023 molecular-integrated staging"""
+
+    anatomical_stage: str = Field(..., description="Original anatomical FIGO stage")
+    figo_2023_stage: str = Field(..., description="FIGO 2023 molecular-integrated stage")
+    stage_group: str = Field(..., description="Stage group (I, II, III, IV)")
+    molecular_modifier: Optional[str] = Field(None, description="Molecular modifier (m1 for favorable, 2 for aggressive)")
+    rationale: str = Field(..., description="Explanation of staging decision")
+    prognosis_impact: str = Field(..., description="How molecular profile affects prognosis")
+    clinical_implications: str = Field(..., description="Treatment implications based on staging")
+    staging_system: str = Field(default="FIGO 2023 (Molecular-Integrated)", description="Staging system used")
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "anatomical_stage": "IA",
+                "figo_2023_stage": "IC",
+                "stage_group": "I",
+                "molecular_modifier": "2",
+                "rationale": "Tumor confined to uterus with <50% invasion. p53 abnormal - upstaged to IC per FIGO 2023",
+                "prognosis_impact": "AGGRESSIVE: p53 abnormal indicates high-risk biology",
+                "clinical_implications": "Recommend combined chemoradiotherapy per PORTEC-3",
+                "staging_system": "FIGO 2023 (Molecular-Integrated)"
+            }
+        }
+
+
 class PredictionResult(BaseModel):
     """Complete risk prediction result"""
 
@@ -62,6 +89,11 @@ class PredictionResult(BaseModel):
     # Molecular Classification
     molecular_classification: MolecularClassification = Field(
         ..., description="Molecular classification result"
+    )
+
+    # FIGO 2023 Staging
+    figo_2023_staging: Optional[FIGO2023Staging] = Field(
+        None, description="FIGO 2023 molecular-integrated staging"
     )
 
     # Comparison
